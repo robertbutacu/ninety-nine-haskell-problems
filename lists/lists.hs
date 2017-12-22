@@ -83,7 +83,10 @@ myLength ::[a] -> Int
 myLength [] = 0
 myLength xs = 1 + (myLength . tail $ xs)
 
-
+myLength2 :: [a] -> Int
+myLength2 xs 
+	| length xs == 0 = 0
+	| otherwise      = 1 + ( myLength2 . tail $ xs )
 
 {-
 (*) Reverse a list.
@@ -114,6 +117,9 @@ True
 True
 -}
 
+isPalindrome :: (Eq a) => [a] -> Bool
+isPalindrome xs = (myReverse xs) == xs
+
 
 {-
 (**) Flatten a nested list structure.
@@ -137,6 +143,12 @@ We have to define a new data type, because lists in Haskell are homogeneous.
 []
 -}
 
+data NestedList a = Elem a | List [NestedList a]
+
+flatten :: (NestedList a) -> [a]
+flatten xs = case xs of Elem a -> [a]
+                        List [] -> []
+                        List (x:xs) -> ( flatten x) ++ (flatten ( List xs)) 
 
 {-
 8 Problem 8
@@ -154,6 +166,12 @@ Example in Haskell:
 "abcade"
 -}
 
+compress :: (Eq a) => [a] -> [a]
+compress (x:[]) = [x]
+compress (x:y:xs) 
+			| x == y = compress (x:xs)
+			| otherwise = [x] ++ compress (y:xs)
+
 
 {-
 (**) Pack consecutive duplicates of list elements into sublists. If a list contains repeated elements they should be placed in separate sublists.
@@ -169,6 +187,14 @@ Example in Haskell:
 ["aaaa","b","cc","aa","d","eeee"]
 -}
 
+--pack :: (Eq a) => [a] => [[a]]
+pack [] = []
+pack (x:xs) = let (curr, next) = span ( ==x) xs
+				in (x:curr) : pack next
+
+pack2 [] = []
+pack2 (x:xs) = (x : (takeWhile (== x) xs)) : pack2 (dropWhile (==x) xs)
+
 
 {-
 (*) Run-length encoding of a list. Use the result of problem P09 to implement the so-called run-length encoding data compression method. Consecutive duplicates of elements are encoded as lists (N E) where N is the number of duplicates of the element E.
@@ -182,3 +208,9 @@ Example in Haskell:
 encode "aaaabccaadeeee"
 [(4,'a'),(1,'b'),(2,'c'),(2,'a'),(1,'d'),(4,'e')]
 -}
+
+encode [] = []
+encode xs = 
+		let packed = pack xs
+		    counts = map length packed
+		in zip (map head packed ) counts
