@@ -21,6 +21,9 @@ lastElement2 :: [a] -> Maybe a
 lastElement2 [] = Nothing
 lastElement2 xs = Just (head . reverse $ xs)
 
+lastElement3 :: [a] -> a
+lastElement3 xs = last xs
+
 
 {-
 (*) Find the last but one element of a list.
@@ -34,6 +37,10 @@ Prelude> myButLast [1,2,3,4]
 Prelude> myButLast ['a'..'z']
 'y'
 -}
+
+butLast :: [a] -> Maybe a
+butLast (x:[]) = Nothing
+butLast xs = lastElement2 . init $ xs
 
 
 
@@ -52,6 +59,13 @@ Prelude> elementAt "haskell" 5
 'e'
 -}
 
+elementAt :: [a] -> Int -> Maybe a
+elementAt xs at
+		| at > ( length xs ) = Nothing
+		| at < 1         = Nothing
+		| at == 1        = Just . head $ xs
+		| otherwise      = elementAt (tail xs) (at - 1)
+
 
 {-
 (*) Find the number of elements of a list.
@@ -64,6 +78,10 @@ Prelude> myLength "Hello, world!"
 13
 Solutions
 -}
+
+myLength ::[a] -> Int
+myLength [] = 0
+myLength xs = 1 + (myLength . tail $ xs)
 
 
 
@@ -78,6 +96,9 @@ Prelude> myReverse [1,2,3,4]
 [4,3,2,1]
 -}
 
+myReverse :: [a] -> [a]
+myReverse [] = []
+myReverse (x:xs) = myReverse xs ++ [x]
 
 
 {-
