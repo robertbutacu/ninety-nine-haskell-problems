@@ -1,3 +1,4 @@
+
 {-
 (*) Modified run-length encoding.
 
@@ -14,6 +15,12 @@ P11> encodeModified "aaaabccaadeeee"
  Multiple 2 'a',Single 'd',Multiple 4 'e']
 -}
 
+data Encoded a = Single a | Multiple Int a deriving (Show)
+
+encodedModified :: (Eq a) => [a] -> [Encoded a]
+encodedModified [] = []
+
+
 {-
 (**) Decode a run-length encoded list.
 
@@ -27,7 +34,12 @@ P12> decodeModified
 "aaaabccaadeeee"
 -}
 
-
+decodeModified :: [Encoded a] -> [a]
+decodeModified xs =
+            let currentDecoding x = case x of (Single c) -> [c]
+                                              (Multiple nr c) -> (replicate nr c)
+            in concatMap currentDecoding xs
+			
 {-
 (**) Run-length encoding of a list (direct solution).
 
@@ -58,6 +70,10 @@ Example in Haskell:
 [1,1,2,2,3,3]
 -}
 
+duplicate :: a -> [a]
+duplicate x = [x] ++ [x]
+
+dupli xs = concatMap duplicate xs
 
 {-
 (**) Replicate the elements of a list a given number of times.
@@ -72,6 +88,9 @@ Example in Haskell:
 "aaabbbccc"
 -}
 
+repli :: [a] -> Int -> [a]
+repli xs n = concatMap (replicate n) xs
+
 
 {-
 (**) Drop every N'th element from a list.
@@ -85,6 +104,8 @@ Example in Haskell:
 *Main> dropEvery "abcdefghik" 3
 "abdeghk"
 -}
+
+
 
 
 {-
