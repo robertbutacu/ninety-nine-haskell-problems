@@ -210,7 +210,6 @@ encode "aaaabccaadeeee"
 -}
 
 encode [] = []
-encode xs = 
-		let packed = pack xs
-		    counts = map length packed
-		in zip (map head packed ) counts
+encode xs = let packed = pack xs
+                counts = map length packed
+            in zip (map head packed ) counts
