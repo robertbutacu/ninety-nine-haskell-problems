@@ -11,6 +11,30 @@ P21> insertAt 'X' "abcd" 2
 "aXbcd"
 -}
 
+
+
+dropp :: [a] -> Int -> [a]
+dropp [] _ = []
+dropp (x:xs) 1 = xs
+dropp (x:xs) n = dropp xs (n-1)
+
+split :: [a] -> Int -> ([a], [a])
+split xs n = (go xs n, dropp xs n)
+          where go :: [a] -> Int -> [a]
+                go [] _ = []
+                go (x:xs) 1 =  [x]
+                go (x:xs) n = [x] ++ go xs (n - 1)
+
+insertAt :: a -> [a] -> Int -> [a]
+insertAt el xs 0 = xs
+insertAt el xs 1 = el : xs
+insertAt el xs n = (head xs) : insertAt el (tail xs) (n - 1)
+
+
+insertAt2 :: a -> [a] -> Int -> [a]
+insertAt2 el xs 0 = xs
+insertAt2 el xs n = let (pre, post) = split xs n
+                    in pre ++ [el] ++ post
 {-
 Create a list containing all integers within a given range.
 
@@ -23,6 +47,12 @@ Example in Haskell:
 Prelude> range 4 9
 [4,5,6,7,8,9]
 -}
+
+range :: Int -> Int -> [Int]
+range from to 
+             | from > to = error "please dont fool yourself"
+             | from == to = [from]
+             | otherwise = from : range (from + 1) to
 
 
 {-
