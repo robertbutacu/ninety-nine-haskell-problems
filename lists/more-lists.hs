@@ -145,11 +145,18 @@ Example in Haskell:
 ("abc", "defghik")
 -}
 
-split :: [a] -> Int -> [a]
-split xs n = go xs 1
-         where go :: [a] -> Int -> [a]
-             go [] _ = []
-             go (x:xs) 1 =  
+
+dropp :: [a] -> Int -> [a]
+dropp [] _ = []
+dropp (x:xs) 1 = xs
+dropp (x:xs) n = dropp xs (n-1)
+
+split :: [a] -> Int -> ([a], [a])
+split xs n = (go xs n, dropp xs n)
+          where go :: [a] -> Int -> [a]
+                go [] _ = []
+                go (x:xs) 1 =  [x]
+                go (x:xs) n = [x] ++ go xs (n - 1)
 
 {-
 (**) Extract a slice from a list.
@@ -165,6 +172,13 @@ Example in Haskell:
 *Main> slice ['a','b','c','d','e','f','g','h','i','k'] 3 7
 "cdefg"
 -}
+
+isInRange :: Int -> Int -> Int -> Bool
+isInRange j k i = i >= j && i <= k
+
+slice :: [a] -> Int -> Int -> [a]
+slice [] _ _ = []
+slice xs start end = map fst . filter (\x -> isInRange start end (snd x)) $ (zip xs [1..])
 
 
 {-
@@ -187,6 +201,12 @@ Examples in Haskell:
 *Main> rotate ['a','b','c','d','e','f','g','h'] (-2)
 "ghabcdef"
 -}
+ 
+
+rotate :: [a] -> Int -> [a]
+rotate xs n = let normalize n size = if n < 0 then size + n else n
+                  slices = split xs (normalize n (length xs))
+              in snd slices ++ fst slices
 
 
 {-
@@ -208,3 +228,8 @@ Example in Haskell:
 *Main> removeAt 2 "abcd"
 ('b',"acd")
 -}
+
+getNthElement xs n = head . map fst . filter (\x -> snd x == n) $ (zip xs [1..])
+
+removeAt :: [a] -> Int -> (a, [a])
+removeAt xs n = (getNthElement xs n, map fst . filter (\x -> snd x /= n) $ (zip xs [1..]))
