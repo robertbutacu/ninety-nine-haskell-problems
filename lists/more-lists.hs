@@ -56,7 +56,16 @@ P13> encodeDirect "aaaabccaadeeee"
  Multiple 2 'a',Single 'd',Multiple 4 'e']
 -}
 
+transform :: [a] -> Encoded a
+transform xs = if length xs == 1 then Single (head xs) 
+			   else Multiple (length xs) (head xs)
 
+
+encodeDirect :: (Eq a) => [a] -> [Encoded a]
+encodeDirect [] = []
+encodeDirect (x:xs) = 
+	let (curr, next) = span (==x) xs
+	in transform (x:curr) : encodeDirect next
 {-
 (*) Duplicate the elements of a list.
 
@@ -105,8 +114,21 @@ Example in Haskell:
 "abdeghk"
 -}
 
+dropEvery :: [a] -> Int -> [a]
+dropEvery [] _ = []
+dropEvery xs n = take (n-1) xs ++ dropEvery (drop n xs) n
 
+dropEvery2 :: [a] -> Int -> [a]
+dropEvery2 xs n = helper xs 1
+     where helper :: [a] -> Int -> [a]
+           helper [] _ = []
+           helper (x:xs) i
+             | i == n    = helper xs 1
+             | otherwise = x : helper xs (i + 1) 
 
+dropEvery3 :: [a] -> Int -> [a]
+dropEvery3 xs n = map fst . filter isDrop $ (zip xs [1..])
+					where isDrop x = snd x /= 0 && snd x `mod` n /= 0
 
 {-
 (*) Split a list into two parts; the length of the first part is given.
@@ -123,6 +145,11 @@ Example in Haskell:
 ("abc", "defghik")
 -}
 
+split :: [a] -> Int -> [a]
+split xs n = go xs 1
+         where go :: [a] -> Int -> [a]
+             go [] _ = []
+             go (x:xs) 1 =  
 
 {-
 (**) Extract a slice from a list.
