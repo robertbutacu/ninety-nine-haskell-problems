@@ -10,6 +10,7 @@ Example in Haskell:
 P21> insertAt 'X' "abcd" 2
 "aXbcd"
 -}
+import System.Random (randomRIO)
 
 
 
@@ -111,6 +112,10 @@ Example in Haskell:
 > combinations 3 "abcdef"
 ["abc","abd","abe",...]
 -}
+
+
+
+
 
 
 {-
