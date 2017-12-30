@@ -2,14 +2,25 @@
 (**) Determine whether a given integer number is prime.
 --}
 
+isPrime ::  Int -> Bool
+isPrime n | n < 4 = n /= 1
+isPrime n = all (== False) (map (\x -> mod n x == 0) [2..(floor $ sqrt $ fromIntegral n)])
+
+
 {--
 (**) Determine the greatest common divisor of two positive integer numbers. Use Euclid's algorithm.
 --}
-
+myGcd :: (Ord a, Num a, Integral a) => a -> a -> a
+myGcd x y 
+     | (x - y) == 0 = x
+     | (x - y) <  0 = gcd x        ( y - x )
+     | otherwise    = gcd ( x - y) y
 
 {--
 (*) Determine whether two positive integer numbers are coprime. Two numbers are coprime if their greatest common divisor equals 1.
 --}
+isCoprime :: (Ord a, Num a, Integral a) => a -> a -> Bool
+isCoprime x y = if myGcd x y == 1 then True else False
 
 
 {--
