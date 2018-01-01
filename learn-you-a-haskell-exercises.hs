@@ -57,10 +57,10 @@ getSum = sum . takeWhile (< 10000) $ [ x ^ 2 | x <- [1..], odd (x ^ 2) ]
 getSum2 = sum . takeWhile (< 10000) . filter odd . map (^ 2) $ [1..]
 
 
-getSum3 = 
+getSum3 n = 
     let odds = filter odd [x ^ 2 | x <- [1..] , odd (x ^ 2)]
-        belowLimit = takeWhile (<10000) odds
-    in sum belowLimit
+        belowLimit n = takeWhile (< n) odds
+    in sum . belowLimit $ n
 
 {-
 For our next problem, we'll be dealing with Collatz sequences. 
