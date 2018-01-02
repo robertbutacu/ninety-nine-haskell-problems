@@ -128,5 +128,6 @@ In most cases, if an even number is written as the sum of two prime numbers, one
 goldbachsInRange lower upper = map (\x -> (x, allGoldbachs x)) [x | x <- [lower..upper], even x]
 
 goldbachsInRange2 lower upper primeLowerLimit = filter (\x -> isBigDifference (snd x)) $ goldbachs
-                                where isBigDifference a = all (\p -> ((fst p ) > primeLowerLimit) && ((snd p) > primeLowerLimit)) a
+                                where isBigDifference a = all isValid a
                                       goldbachs = goldbachsInRange lower upper
+                                      isValid p = ((fst p ) > primeLowerLimit) && ((snd p) > primeLowerLimit)
