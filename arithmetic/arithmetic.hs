@@ -42,8 +42,8 @@ phi m = coprimes [1..(fromIntegral (m - 1))]
 (**) Determine the prime factors of a given positive integer. Construct a flat list containing the prime factors in ascending order.
 --}
 
-primes :: Int -> [Int]
-primes n = filter (\x -> mod n x == 0) $ primes
+primeFactors :: Int -> [Int]
+primeFactors n = filter (\x -> mod n x == 0) $ primes
          where primes = filter isPrime [1..(n-1)]
                
 
@@ -53,7 +53,10 @@ primes n = filter (\x -> mod n x == 0) $ primes
 
 Construct a list containing the prime factors and their multiplicity.
 --}
-
+primeFactorsMultiplicity n = map transform ( primeFactors n )
+                           where transform x = (x, withMultiplicity x)
+                                 withMultiplicity x = go n x 0
+                                 go m p q = if mod m p == 0 then go (div m p) p (q + 1) else q 
 
 
 {--
