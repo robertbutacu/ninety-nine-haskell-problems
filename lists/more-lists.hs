@@ -127,7 +127,7 @@ dropEvery2 xs n = helper xs 1
              | otherwise = x : helper xs (i + 1) 
 
 dropEvery3 :: [a] -> Int -> [a]
-dropEvery3 xs n = map fst . filter isDrop $ (zip xs [1..])
+dropEvery3 xs n = map fst . filter isDrop $ zip xs [1..]
 					where isDrop x = snd x /= 0 && snd x `mod` n /= 0
 
 {-
@@ -178,7 +178,7 @@ isInRange j k i = i >= j && i <= k
 
 slice :: [a] -> Int -> Int -> [a]
 slice [] _ _ = []
-slice xs start end = map fst . filter (\x -> isInRange start end (snd x)) $ (zip xs [1..])
+slice xs start end = map fst . filter (\x -> isInRange start end (snd x)) $ zip xs [1..]
 
 
 {-
@@ -229,7 +229,7 @@ Example in Haskell:
 ('b',"acd")
 -}
 
-getNthElement xs n = head . map fst . filter (\x -> snd x == n) $ (zip xs [1..])
+getNthElement xs n = head . map fst . filter (\x -> snd x == n) $ zip xs [1..]
 
 removeAt :: [a] -> Int -> (a, [a])
-removeAt xs n = (getNthElement xs n, map fst . filter (\x -> snd x /= n) $ (zip xs [1..]))
+removeAt xs n = (getNthElement xs n, map fst . filter (\x -> snd x /= n) $ zip xs [1..])

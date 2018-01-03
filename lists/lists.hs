@@ -169,7 +169,7 @@ Example in Haskell:
 compress :: (Eq a) => [a] -> [a]
 compress (x:[]) = [x]
 compress (x:y:xs) 
-			| x == y = compress (x:xs)
+			| x == y = compress $ x:xs
 			| otherwise = [x] ++ compress (y:xs)
 
 
@@ -189,8 +189,8 @@ Example in Haskell:
 
 --pack :: (Eq a) => [a] => [[a]]
 pack [] = []
-pack (x:xs) = let (curr, next) = span ( ==x) xs
-				in (x:curr) : pack next
+pack (x:xs) = let (curr, next) = span ( ==x ) xs
+              in (x:curr) : pack next
 
 pack2 [] = []
 pack2 (x:xs) = (x : (takeWhile (== x) xs)) : pack2 (dropWhile (==x) xs)

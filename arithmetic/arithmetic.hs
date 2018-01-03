@@ -117,7 +117,7 @@ firstGoldbach :: Int -> Maybe (Int, Int)
 firstGoldbach n = if even n then computeGoldbach n else Nothing
 
 computeGoldbach :: Int -> Maybe (Int, Int)
-computeGoldbach n = hasFound  ( find firstMatch primes )
+computeGoldbach n = hasFound $ find firstMatch primes 
                     where primes = filter isPrime [1..n]
                           firstMatch x = elem (n - x) primes
                           hasFound a = case a of Just y  -> Just (y, subtract y n)
